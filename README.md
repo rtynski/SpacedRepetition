@@ -1,4 +1,4 @@
-# SpacedRepetition.Net
+# SpacedRepetition
 A .NET library that implements spaced repetition algorithms
 
 Spaced repetition systems (SRS) are a way of effectively learning information by rote. They are useful for situations where you need to remember many different items, for example learning the vocabulary for a new language. 
@@ -12,9 +12,6 @@ There are a number of different SRS algorithms of varying complexity. SpacedRepe
 
 It is also possible to implement your own. 
 
-## Using the library
+## Based on project
 
-There is  a [nuget package](https://github.com/helephant/SpacedRepetition.Net) for .NET, so you can install it into your project using the following command:
-```
-Install-Package SpacedRepetition.Net
-```
+Based on the project [GitHub](https://github.com/helephant/SpacedRepetition.Net).

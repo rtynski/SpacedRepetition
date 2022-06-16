@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{C7AC66C0-9B92-4ED8-8236-656F9DC486B3}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{2426F98C
 		build.ps1 = build.ps1
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacedRepetition.Net", "src\SpacedRepetition.Net\SpacedRepetition.Net.csproj", "{4206106B-1223-4024-A938-DAADD3A410AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpacedRepetition", "src\SpacedRepetition.Net\SpacedRepetition.csproj", "{4206106B-1223-4024-A938-DAADD3A410AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpacedRepetition.Net.Tests.Unit", "src\SpacedRepetition.Net.Tests.Unit\SpacedRepetition.Net.Tests.Unit.csproj", "{C51AC85F-B50A-43EC-8015-054050AD0E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpacedRepetition.Tests", "src\SpacedRepetition.Net.Tests.Unit\SpacedRepetition.Tests.csproj", "{C51AC85F-B50A-43EC-8015-054050AD0E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpacedRepetition.Net.ReviewStrategies;
+using System;
 using System.Diagnostics;
-using NUnit.Framework;
-using SpacedRepetition.Net.ReviewStrategies;
+using Xunit;
 
 namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
 {
@@ -9,7 +9,7 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
     {
         private readonly ClockStub _clock = new ClockStub(DateTime.Now);
 
-        [Test]
+        [Fact]
         public void one_day_interval_for_items_without_correct_review()
         {
             var item = new ReviewItemBuilder().NeverReviewed().Build();
@@ -17,22 +17,23 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
 
             var nextReview = strategy.NextReview(item);
 
-            Assert.That(nextReview, Is.EqualTo(_clock.Now()));
+            Assert.Equal(_clock.Now(), nextReview);
         }
 
-        [Test]
+        [Fact]
         public void six_day_interval_after_card_is_reviewed_correctly_once()
         {
             var item = new ReviewItemBuilder().WithLastReviewDate(_clock.Now().AddDays(-10)).WithCorrectReviewStreak(1).Build();
+            var sixDayAfter = item.ReviewDate.AddDays(6);
             var strategy = new SuperMemo2ReviewStrategy(_clock);
 
             var nextReview = strategy.NextReview(item);
 
-            Assert.That(nextReview, Is.EqualTo(item.ReviewDate.AddDays(6)));
+            Assert.Equal(sixDayAfter, nextReview);
         }
 
 
-        [Test]
+        [Fact]
         public void n_plus_2_is_interval_days_since_last_review_times_easiness_factor()
         {
             var item = new ReviewItemBuilder()
@@ -42,13 +43,14 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
                             .WithDifficultyRating(DifficultyRating.Easiest)
                             .Build();
             var strategy = new SuperMemo2ReviewStrategy(_clock);
+            var days25 = item.ReviewDate.AddDays(25);
 
             var nextReview = strategy.NextReview(item);
 
-            Assert.That(nextReview, Is.EqualTo(item.ReviewDate.AddDays(25)));
+            Assert.Equal(days25, nextReview);
         }
 
-        [Test]
+        [Fact]
         public void short_interval_for_difficult_cards()
         {
             var difficultyRating = DifficultyRating.MostDifficult;
@@ -61,13 +63,15 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
                                 .Build();
             var strategy = new SuperMemo2ReviewStrategy(_clock);
 
+            var expectedInterval = (daysSinceLastReview - 1) * strategy.DifficultyRatingToEasinessFactor(difficultyRating);
+            var exceptDate = item.ReviewDate.AddDays(expectedInterval);
+
             var nextReview = strategy.NextReview(item);
 
-            var expectedInterval = (daysSinceLastReview - 1) * strategy.DifficultyRatingToEasinessFactor(difficultyRating);
-            Assert.That(nextReview, Is.EqualTo(item.ReviewDate.AddDays(expectedInterval)));
+            Assert.Equal(exceptDate, nextReview);
         }
 
-        [Test]
+        [Fact]
         public void long_interval_for_easy_cards()
         {
             var difficultyRating = DifficultyRating.Easiest;
@@ -83,10 +87,11 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var nextReview = strategy.NextReview(item);
 
             var expectedInterval = (daysSincePreviousReview - 1) * strategy.DifficultyRatingToEasinessFactor(difficultyRating);
-            Assert.That(nextReview, Is.EqualTo(item.ReviewDate.AddDays(expectedInterval)));
+            var exceptedDate = item.ReviewDate.AddDays(expectedInterval);
+            Assert.Equal(exceptedDate, nextReview);
         }
 
-        [Test]
+        [Fact]
         public void perfect_review_lowers_difficulty()
         {
             var item = new ReviewItemBuilder().Due().WithDifficultyRating(50).Build();
@@ -95,10 +100,10 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var actualDifficulty = strategy.AdjustDifficulty(item, ReviewOutcome.Perfect);
 
             var expectedDifficulty = new DifficultyRating(41);
-            Assert.That(actualDifficulty, Is.EqualTo(expectedDifficulty));
+            Assert.Equal(expectedDifficulty, actualDifficulty);
         }
 
-        [Test]
+        [Fact]
         public void hesitant_review_leaves_difficulty_the_same()
         {
             var item = new ReviewItemBuilder().Due().WithDifficultyRating(50).Build();
@@ -107,10 +112,10 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var actualDifficulty = strategy.AdjustDifficulty(item, ReviewOutcome.Hesitant);
 
             var expectedDifficulty = new DifficultyRating(50);
-            Assert.That(actualDifficulty, Is.EqualTo(expectedDifficulty));
+            Assert.Equal(expectedDifficulty, actualDifficulty);
         }
 
-        [Test]
+        [Fact]
         public void incorrect_review_increases_difficulty()
         {
             var item = new ReviewItemBuilder().Due().WithDifficultyRating(50).Build();
@@ -119,10 +124,10 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var actualDifficulty = strategy.AdjustDifficulty(item, ReviewOutcome.Incorrect);
 
             var expectedDifficulty = new DifficultyRating(61);
-            Assert.That(actualDifficulty, Is.EqualTo(expectedDifficulty));
+            Assert.Equal(expectedDifficulty, actualDifficulty);
         }
 
-        [Test]
+        [Fact]
         public void difficulty_can_not_be_greater_than_100()
         {
             var item = new ReviewItemBuilder().Due().WithDifficultyRating(100).Build();
@@ -131,10 +136,10 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var actualDifficulty = strategy.AdjustDifficulty(item, ReviewOutcome.Incorrect);
 
             var expectedDifficulty = new DifficultyRating(100);
-            Assert.That(actualDifficulty, Is.EqualTo(expectedDifficulty));
+            Assert.Equal(expectedDifficulty, actualDifficulty);
         }
 
-        [Test]
+        [Fact]
         public void difficulty_can_not_be_less_than_0()
         {
             var item = new ReviewItemBuilder().Due().WithDifficultyRating(0).Build();
@@ -143,11 +148,11 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
             var actualDifficulty = strategy.AdjustDifficulty(item, ReviewOutcome.Perfect);
 
             var expectedDifficulty = new DifficultyRating(0);
-            Assert.That(actualDifficulty, Is.EqualTo(expectedDifficulty));
+            Assert.Equal(expectedDifficulty, actualDifficulty);
         }
 
 
-        [Test, Ignore("Use this to find out when the next review should be")]
+        [Fact(Skip = "Use this to find out when the next review should be")]
         public void when_is_the_next_review_due()
         {
             var item = new ReviewItem
