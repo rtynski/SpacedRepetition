@@ -22,6 +22,7 @@ namespace SpacedRepetition.Net
 
         public StudySession(IEnumerable<T> items)
         {
+            items = items ?? throw new ArgumentNullException(nameof(items));
             _enumerator = items.GetEnumerator();
 
             ReviewStrategy = new SuperMemo2ReviewStrategy();

@@ -9,20 +9,20 @@ namespace SpacedRepetition.Net
         public DifficultyRating(int percentage)
         {
             if (percentage < 0 || percentage > 100)
-                throw new ArgumentOutOfRangeException("percentage", "DifficultyRating be between 0 (least difficult) and 100 (most difficult)");
+                throw new ArgumentOutOfRangeException(nameof(percentage), "DifficultyRating be between 0 (least difficult) and 100 (most difficult)");
 
             Percentage = percentage;
         }
 
         #region Equality
-        public bool Equals(DifficultyRating other)
+        public bool Equals(DifficultyRating? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Percentage == other.Percentage;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
@@ -47,35 +47,35 @@ namespace SpacedRepetition.Net
         #endregion
 
         #region Comparable
-        public int CompareTo(DifficultyRating other)
+        public int CompareTo(DifficultyRating? other)
         {
-            return Percentage.CompareTo(other.Percentage);
+            return Percentage.CompareTo(other?.Percentage);
         }
 
-        public static bool operator >(DifficultyRating left, DifficultyRating right)
+        public static bool operator >(DifficultyRating? left, DifficultyRating? right)
         {
-            return left.Percentage > right.Percentage;
+            return left?.Percentage > right?.Percentage;
         }
 
-        public static bool operator >=(DifficultyRating left, DifficultyRating right)
+        public static bool operator >=(DifficultyRating? left, DifficultyRating? right)
         {
-            return left.Percentage >= right.Percentage;
+            return left?.Percentage >= right?.Percentage;
         }
 
-        public static bool operator <(DifficultyRating left, DifficultyRating right)
+        public static bool operator <(DifficultyRating? left, DifficultyRating? right)
         {
-            return left.Percentage < right.Percentage;
+            return left?.Percentage < right?.Percentage;
         }
 
-        public static bool operator <=(DifficultyRating left, DifficultyRating right)
+        public static bool operator <=(DifficultyRating? left, DifficultyRating? right)
         {
-            return left.Percentage <= right.Percentage;
+            return left?.Percentage <= right?.Percentage;
         }
         #endregion
 
-        public static implicit operator int(DifficultyRating rating)
+        public static implicit operator int(DifficultyRating? rating)
         {
-            return rating.Percentage;
+            return rating?.ToInt32()??0;
         }
         public static implicit operator DifficultyRating(int percentage)
         {
@@ -84,7 +84,7 @@ namespace SpacedRepetition.Net
 
         public static implicit operator byte(DifficultyRating rating)
         {
-            return (byte)rating.Percentage;
+            return rating?.ToByte()??0;
         }
         public static implicit operator DifficultyRating(byte percentage)
         {
@@ -98,5 +98,27 @@ namespace SpacedRepetition.Net
 
         public static DifficultyRating Easiest { get { return new DifficultyRating(0); } }
         public static DifficultyRating MostDifficult { get { return new DifficultyRating(100); } }
+
+        public int ToInt32()
+        {
+            return this.Percentage;
+        }
+
+        public void FromInt32(int value)
+        {
+            Percentage = value;
+        }
+
+        public byte ToByte()
+        {
+            return (byte)this.Percentage;
+        }
+
+        public void FromByte(byte value)
+        {
+            Percentage = value;
+        }
+
+        
     }
 }

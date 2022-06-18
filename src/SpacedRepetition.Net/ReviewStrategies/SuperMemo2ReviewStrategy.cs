@@ -20,6 +20,7 @@ namespace SpacedRepetition.Net.ReviewStrategies
 
         public DateTime NextReview(IReviewItem item)
         {
+            item = item ?? throw new ArgumentNullException(nameof(item));
             var now = _clock.Now();
             if(item.CorrectReviewStreak == 0)
                 return now;
@@ -34,6 +35,7 @@ namespace SpacedRepetition.Net.ReviewStrategies
 
         public DifficultyRating AdjustDifficulty(IReviewItem item, ReviewOutcome outcome)
         {
+            item = item ?? throw new ArgumentNullException(nameof(item));
             //EF':=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
             //where:
             //EF' - new value of the E-Factor,
@@ -53,13 +55,13 @@ namespace SpacedRepetition.Net.ReviewStrategies
             return new DifficultyRating(newDifficultyRating);
         }
 
-        public double DifficultyRatingToEasinessFactor(int difficultyRating)
+        public static double DifficultyRatingToEasinessFactor(int difficultyRating)
         {
             // using a linear equation - y = mx + b
             return (-0.012 * difficultyRating) + 2.5;
         }
 
-        public int EasinessFactorToDifficultyRating(double easinessFactor)
+        public static int EasinessFactorToDifficultyRating(double easinessFactor)
         {
             // using a linear equation - x = (y - b)/m
             return (int)((easinessFactor - 2.5) / -0.012);
