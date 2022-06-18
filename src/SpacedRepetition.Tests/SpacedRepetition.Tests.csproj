@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SpacedRepetition.Net\SpacedRepetition.csproj" />
+	  <ProjectReference Include="..\SpacedRepetition\SpacedRepetition.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

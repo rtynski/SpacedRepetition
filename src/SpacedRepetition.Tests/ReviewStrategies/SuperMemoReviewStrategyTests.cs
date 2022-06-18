@@ -63,7 +63,7 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
                                 .Build();
             var strategy = new SuperMemo2ReviewStrategy(_clock);
 
-            var expectedInterval = (daysSinceLastReview - 1) * strategy.DifficultyRatingToEasinessFactor(difficultyRating);
+            var expectedInterval = (daysSinceLastReview - 1) * SuperMemo2ReviewStrategy.DifficultyRatingToEasinessFactor(difficultyRating);
             var exceptDate = item.ReviewDate.AddDays(expectedInterval);
 
             var nextReview = strategy.NextReview(item);
@@ -86,7 +86,7 @@ namespace SpacedRepetition.Net.Tests.Unit.ReviewStrategies
 
             var nextReview = strategy.NextReview(item);
 
-            var expectedInterval = (daysSincePreviousReview - 1) * strategy.DifficultyRatingToEasinessFactor(difficultyRating);
+            var expectedInterval = (daysSincePreviousReview - 1) * SuperMemo2ReviewStrategy.DifficultyRatingToEasinessFactor(difficultyRating);
             var exceptedDate = item.ReviewDate.AddDays(expectedInterval);
             Assert.Equal(exceptedDate, nextReview);
         }
